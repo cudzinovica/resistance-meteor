@@ -1,0 +1,163 @@
+<head>
+  <title>The Resistance</title>
+</head>
+
+<body>
+	<div class="container">
+		<div class="main-content">
+			{{> Template.dynamic template=whichView}}
+		</div>
+	</div>
+</body>
+
+<template name="startMenu">
+	<body>
+		<div class="container">
+			<header>
+				<h1>Welcome to The Resistance!</h1>
+			</header>
+			
+			<ul>
+				<form id="join-game">
+					<input type="text" id="player-name" name="playerName" 
+						placeholder="Enter name here"/>
+					<input type="submit" value="Join Game">
+				</form>
+			</ul>
+		</div>
+	</body>
+</template>
+
+<template name="lobby">
+  {{#each players}}
+		<div><span class="text">{{name}}</span></div>
+	{{/each}}
+	<div class="buttons">
+		<button class="leave-game">Leave Game</button>
+		<button class="start-game">Start Game</button>
+	</div>
+</template>
+
+<template name="gameView">
+	<div><button class="end-game">End Game</button></div>
+	
+	<div class="player-list">
+		<div><span class="text">Players:</span></div>
+		{{#each players}}
+			<div><span class="text">
+				{{name}}
+				{{#if turn}} - turn{{/if}}
+			</span></div>
+		{{/each}}
+	</div>
+	<div><span class="text">--------------------</span></div>
+	
+	<div class="player-info">
+		<div><span class="text">You are 
+			{{#if isInnocent}}
+				Innocent
+			{{else}}
+				a Traitor
+			{{/if}}
+		</span></div>
+		{{#unless isInnocent}}
+			<p>Other traitor(s):</p>
+			{{#each traitors}}
+				<div><span class="text">{{name}}</span></div>
+			{{/each}}
+		{{/unless}}
+	</div>
+	<div><span class="text">--------------------</span></div>
+	
+	<div class="game-info">
+		<p>On Round {{getRound}}</p>
+		<div><span class="text">Missions Summary</span></div>
+		{{#each missionResults}}
+			<div><span class="text">
+				Round {{@index}}: {{#if this}}Success{{else}}Fail{{/if}}
+			</span></div>
+		{{/each}}
+	</div>
+	<div><span class="text">--------------------</span></div>
+	
+	
+	<div id="picking">
+		{{#if isTurn}}
+			<div><span class="text">Choose {{missionNum}} players to go on a mission.</span></div>
+			{{#each players}}
+				<button style="background-color:grey" class="player-button">
+					{{name}}
+				</button>
+			{{/each}}
+			<button class="submit-button">Submit</button>
+		{{/if}}
+	</div>
+	
+	
+	<div id="voting" class="hidden">
+		<div>
+			<div><span class="text">Players selected to go on mission:</span></div>
+			{{#each pickedPlayers}}
+				<div><span class="text">{{name}}</span></div>
+			{{/each}}
+		</div>
+		<button id="approve" style="background-color:grey" class="approve">Approve</button>
+		<button id="reject" style="background-color:grey" class="reject">Reject</button>
+	</div>
+	
+	
+	<div id="vote-results" class="hidden">
+		<div><span class="text">
+			{{#if approveVote}}
+				Mission is a Go.
+			{{else}}
+				Mission Rejected.
+			{{/if}}
+		</span></div>
+		<div id="vote-players">
+			<div><span class="text">Players who approved:</span></div>
+			{{#each players}}
+				{{#if approves}}
+					<div><span class="text">{{name}}</span></div>
+				{{/if}}
+			{{/each}}
+			<div><span class="text">Players who rejected:</span></div>
+			{{#each players}}
+				{{#unless approves}}
+					<div><span class="text">{{name}}</span></div>
+				{{/unless}}
+			{{/each}}
+		</div>
+	</div>
+	
+	
+	<div id="pass-fail" class="hidden">
+		{{#if isPicked}}
+			<button id="pass" style="background-color:grey" class="pass">Pass</button>
+			<button id="fail" style="background-color:grey;display:none" class="fail">Fail</button>
+		{{/if}}
+	</div>
+	
+	<div id="pass-results" class="hidden">
+		<div><span class="text">Passes: {{#with getGame}}{{numPass}}{{/with}}</span></div>
+		<div><span class="text">Fails: {{#with getGame}}{{numFail}}{{/with}}</span></div>
+	</div>
+</template>
+
+<template name="gameOver">
+	<h4><b>
+		{{#if innocentsWin}}
+			Resistance Wins
+		{{else}}
+			Traitors Wins
+		{{/if}}
+	</b></h4>
+	<button class="to-lobby">To Lobby</button>
+</template>
+
+	
+	
+	
+	
+	
+	
