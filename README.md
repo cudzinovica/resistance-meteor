@@ -1,3 +1,6 @@
+This version is now deprecated. Current version [here](https://github.com/cudzinovica/resistance).
+
+
 # resistance
 The Resistance game, playable by only using devices that can browse the internet.
 
